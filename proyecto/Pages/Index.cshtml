@@ -99,18 +99,12 @@
                                 @* ... botón borrar ... *@
                                 </div>
                             </div>
-
-                            <div class="flex gap-1 ml-2 border-l pl-3 border-slate-200">
-                                <a asp-page="/EditarSub" asp-route-id="@sub.Id" class="p-2 text-slate-400 hover:text-indigo-600 transition-colors" title="Editar">
-                                    📝
-                                </a>
-
                                 
                                 <form method="post" asp-page-handler="Delete" asp-route-id="@sub.Id" onsubmit="return confirm('¿Eliminar?');">
                                     <button type="submit" class="p-2 text-slate-400 hover:text-red-600 transition-colors">🗑️</button>
                                 </form>
                             </div>
-                        </div>
+                      
                    
                 }
             </div>

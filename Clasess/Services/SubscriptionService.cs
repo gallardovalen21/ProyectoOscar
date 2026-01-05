@@ -5,18 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 namespace Clasess.Services
 {
     public class SubscriptionService
     {
         private readonly SubDbContext _db;
-        private readonly IWebHostEnvironment _env;
 
-        public SubscriptionService(SubDbContext sub, IWebHostEnvironment env)
+
+        public SubscriptionService(SubDbContext sub)
         {
             _db = sub;
-            _env = env;
+            
         }
         public Subscription AddSubscription(Subscription subscription)
         {
@@ -113,7 +112,7 @@ namespace Clasess.Services
 
         private void RunPriceUpdater()
         {
-            string jsonPath = Path.Combine(_env.ContentRootPath, "Scripts", "latest_prices.json");
+            string jsonPath = Path.Combine( "Scripts", "latest_prices.json");
 
             // Solo ejecutamos Python si el archivo no existe o tiene más de 12 horas
             if (File.Exists(jsonPath) && File.GetLastWriteTime(jsonPath) > DateTime.Now.AddHours(-12))
@@ -126,7 +125,7 @@ namespace Clasess.Services
         private Dictionary<string, decimal> LoadPricesFromJson()
         {
             var dictionary = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
-            string jsonPath = Path.Combine(_env.ContentRootPath, "Scripts", "latest_prices.json");
+            string jsonPath = Path.Combine( "Scripts", "latest_prices.json");
 
             if (File.Exists(jsonPath))
             {

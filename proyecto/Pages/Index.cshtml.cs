@@ -37,22 +37,33 @@ namespace proyecto.Pages
         public int? JustPaidId { get; set; }
         public void OnGet()
         {
-
             if (TempData["JustPaidId"] != null)
             {
                 JustPaidId = (int)TempData["JustPaidId"];
             }
+
             _service.ProcessAutoPayments();
 
-            var allSubscriptions = _service.GetAllSubscriptionWithPayments() ?? new List<Subscription>();
+            var allSubscriptions = _service.GetAllSubscriptionWithPayments()
+                ?? new List<Subscription>();
 
             Subscriptions = allSubscriptions
                 .Where(s => s.Status == "Activa")
                 .ToList();
 
-            TotalMonthly = Subscriptions.Sum(s => s.Amount);
-            TotalYearly = TotalMonthly * 12;
+            var now = DateTime.Now;
+
+            TotalMonthly = Subscriptions
+                .SelectMany(s => s.Payments ?? Enumerable.Empty<Payment>())
+                .Where(p => p.Date.Year == now.Year && p.Date.Month == now.Month)
+                .Sum(p => p.Amount);
+
+            TotalYearly = Subscriptions
+    .SelectMany(s => s.Payments ?? Enumerable.Empty<Payment>())
+    .Where(p => p.Date.Year == now.Year)
+    .Sum(p => p.Amount);
         }
+
 
     }
 }
