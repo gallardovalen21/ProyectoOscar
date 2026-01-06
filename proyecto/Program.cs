@@ -9,7 +9,7 @@ builder.Services.AddRazorPages();
 // Usar SQL Server en lugar de SQLite
 builder.Services.AddDbContext<SubDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("proyectoContext1"));
 });
 builder.Services.AddScoped<SubscriptionService>();
 var app = builder.Build();
@@ -18,7 +18,6 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SubDbContext>();
-    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.

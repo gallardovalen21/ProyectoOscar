@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": false,
+      "restoreTime": "2026-01-06T01:43:02.8106006Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
+      "Type": "subscription",
+      "Value": "5984ccf5-fe61-4cb6-a077-c84e82de6030"
+    },
+    "mssql1.resourceGroupLocation": {
+      "Name": "mssql1.resourceGroupLocation",
+      "Type": "location",
+      "Value": "canadacentral"
+    },
+    "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "proyecto20260105171831ResourceGroup"
+    },
+    "proyectoSubscriptionOscar.subscriptionId": {
+      "Name": "proyectoSubscriptionOscar.subscriptionId",
+      "Type": "subscription",
+      "Value": "5984ccf5-fe61-4cb6-a077-c84e82de6030"
+    },
+    "proyectoSubscriptionOscar.resourceGroupName": {
+      "Name": "proyectoSubscriptionOscar.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "proyecto20260105171831ResourceGroup"
+    },
+    "mssql1.serviceConnectorResourceGroupName": {
+      "Name": "mssql1.serviceConnectorResourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "proyecto20260105171831ResourceGroup"
+    }
+  }
+}
