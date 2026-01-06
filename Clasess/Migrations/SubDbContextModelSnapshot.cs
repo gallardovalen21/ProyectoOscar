@@ -44,7 +44,7 @@ namespace Clasess.Migrations
 
                     b.HasIndex("SubscriptionId");
 
-                    b.ToTable("Pagos", (string)null);
+                    b.ToTable("Pagos", "app");
                 });
 
             modelBuilder.Entity("Clasess.Subscription", b =>
@@ -99,7 +99,7 @@ namespace Clasess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscriptions", "app");
                 });
 
             modelBuilder.Entity("Clasess.Payment", b =>

@@ -18,15 +18,22 @@ namespace Clasess
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Payment>(entity => {
-                entity.ToTable("Pagos");
-                entity.Property(p => p.Amount).HasPrecision(18, 2);
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.ToTable("Pagos", "app");
+                entity.Property(p => p.Amount)
+                      .HasPrecision(18, 2);
             });
+
             modelBuilder.Entity<Subscription>(entity =>
             {
+                entity.ToTable("Subscriptions", "app"); 
                 entity.Property(s => s.Amount)
                       .HasPrecision(18, 2);
             });
         }
+
+
     }
 }
+

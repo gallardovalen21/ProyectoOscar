@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clasess.Migrations
 {
     [DbContext(typeof(SubDbContext))]
-    [Migration("20260105183546_InitialCreate")]
+    [Migration("20260106210821_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -47,7 +47,7 @@ namespace Clasess.Migrations
 
                     b.HasIndex("SubscriptionId");
 
-                    b.ToTable("Pagos", (string)null);
+                    b.ToTable("Pagos", "app");
                 });
 
             modelBuilder.Entity("Clasess.Subscription", b =>
@@ -102,7 +102,7 @@ namespace Clasess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscriptions", "app");
                 });
 
             modelBuilder.Entity("Clasess.Payment", b =>
