@@ -23,24 +23,30 @@ namespace proyecto.Pages
 
         public async Task OnGet()
         {
-            var datos = await _context.Payments
+           
+            var pagos = await _context.Payments
                 .Include(p => p.Subscription)
                 .Where(p => p.Date.Year == Year)
+                .ToListAsync();
+
+            
+            var datos = pagos
                 .GroupBy(p => new
                 {
                     p.Date.Year,
                     p.Date.Month,
-                    p.Subscription.ServiceName
+                    // coalesce service name to avoid null keys
+                    ServiceName = p.Subscription?.ServiceName
                 })
                 .Select(g => new
                 {
                     MesNumero = g.Key.Month,
                     MesNombre = new DateTime(Year, g.Key.Month, 1)
                         .ToString("MMM", new CultureInfo("es-ES")),
-                    Suscripcion = g.Key.ServiceName,
-                    Total = g.Sum(x => x.Amount)
+                    Suscripcion = g.Key.ServiceName ?? "(Sin suscripción)",
+                    Total = g.Sum(x => x.Amount) 
                 })
-                .ToListAsync();
+                .ToList();
 
             Meses = Enumerable.Range(1, 12)
                 .Select(m => new DateTime(Year, m, 1)
@@ -53,7 +59,9 @@ namespace proyecto.Pages
 
             foreach (var sub in suscripciones)
             {
-                DatosPorSuscripcion[sub] = Meses
+                // ensure the key exists and is non-null
+                var key = sub ?? "(Sin suscripción)";
+                DatosPorSuscripcion[key] = Meses
                     .Select((m, index) =>
                         datos.FirstOrDefault(x =>
                             x.MesNumero == index + 1 &&
@@ -61,5 +69,6 @@ namespace proyecto.Pages
                     ).ToList();
             }
         }
+
     }
 }

@@ -12,28 +12,28 @@ namespace Clasess
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
-        public SubDbContext(DbContextOptions options) : base(options) { 
+        public SubDbContext(DbContextOptions<SubDbContext> options)
+            : base(options)
+        {
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Payment>(entity =>
             {
-                entity.ToTable("Pagos", "app");
+                entity.ToTable("Pagos");
                 entity.Property(p => p.Amount)
                       .HasPrecision(18, 2);
             });
 
             modelBuilder.Entity<Subscription>(entity =>
             {
-                entity.ToTable("Subscriptions", "app"); 
+                entity.ToTable("Subscriptions");
                 entity.Property(s => s.Amount)
                       .HasPrecision(18, 2);
             });
         }
-
-
     }
 }
-
