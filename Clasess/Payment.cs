@@ -17,7 +17,5 @@ namespace Clasess
 
         // Navigation property to Subscription
         public Subscription? Subscription { get; set; }
-        // Periodo associated with this payment (e.g. "01-02" or "01/03")
-        public string? Periodo { get; set; }
     }
 }

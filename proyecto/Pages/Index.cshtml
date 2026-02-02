@@ -59,18 +59,6 @@
                                     <span class="text-slate-300">•</span>
                                     <span class="text-sm font-bold text-indigo-600">Próximo: @sub.NextBillingDate.ToShortDateString()</span>
                                 </div>
-
-                                @{ var last = (sub.Payments != null && sub.Payments.Any()) ? sub.Payments.OrderByDescending(p => p.Date).First() : null; }
-                                @if (last != null)
-                                {
-                                    <div class="text-sm text-slate-500 mt-2">
-                                        Último pago: <span class="font-medium">@last.Date.ToString("yyyy-MM-dd")</span>
-                                        <span class="mx-2">•</span>
-                                        Periodo: <span class="font-medium">@(last.Periodo ?? "-")</span>
-                                        <span class="mx-2">•</span>
-                                        Monto: <span class="font-bold text-indigo-600">@last.Amount.ToString("C2")</span>
-                                    </div>
-                                }
                             </div>
                         </div>
                             

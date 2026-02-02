@@ -26,9 +26,6 @@ namespace Clasess
                 entity.ToTable("Pagos");
                 entity.Property(p => p.Amount)
                       .HasPrecision(18, 2);
-                // Map Periodo column for payments
-                entity.Property(p => p.Periodo)
-                      .HasColumnType("TEXT");
             });
 
             modelBuilder.Entity<Subscription>(entity =>
