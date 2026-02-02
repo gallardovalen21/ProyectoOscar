@@ -19,11 +19,12 @@ builder.Services.AddScoped<SubscriptionService>();
 
 var app = builder.Build();
 
-// Apply pending migrations and create the database
+// Use a single scope to get the DbContext, print DataSource and apply migrations
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SubDbContext>();
-    db.Database.Migrate(); 
+    Console.WriteLine(db.Database.GetDbConnection().DataSource);
+    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.

@@ -25,7 +25,7 @@ namespace proyecto.Pages
             new DateTime(Year, Month, 1)
                 .ToString("MMMM yyyy", new CultureInfo("es-ES"));
 
-        // Navigation properties used in the view
+        // Navigation helpers used by the view
         public int PrevYear => Month == 1 ? Year - 1 : Year;
         public int PrevMonth => Month == 1 ? 12 : Month - 1;
         public int NextYear => Month == 12 ? Year + 1 : Year;
@@ -58,3 +58,5 @@ namespace proyecto.Pages
         }
     }
 }
+
+    

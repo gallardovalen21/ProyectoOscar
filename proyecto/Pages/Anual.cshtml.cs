@@ -35,15 +35,14 @@ namespace proyecto.Pages
                 {
                     p.Date.Year,
                     p.Date.Month,
-                    // coalesce service name to avoid null keys
-                    ServiceName = p.Subscription?.ServiceName
+                    p.Subscription.ServiceName
                 })
                 .Select(g => new
                 {
                     MesNumero = g.Key.Month,
                     MesNombre = new DateTime(Year, g.Key.Month, 1)
                         .ToString("MMM", new CultureInfo("es-ES")),
-                    Suscripcion = g.Key.ServiceName ?? "(Sin suscripción)",
+                    Suscripcion = g.Key.ServiceName,
                     Total = g.Sum(x => x.Amount) 
                 })
                 .ToList();
@@ -59,9 +58,7 @@ namespace proyecto.Pages
 
             foreach (var sub in suscripciones)
             {
-                // ensure the key exists and is non-null
-                var key = sub ?? "(Sin suscripción)";
-                DatosPorSuscripcion[key] = Meses
+                DatosPorSuscripcion[sub] = Meses
                     .Select((m, index) =>
                         datos.FirstOrDefault(x =>
                             x.MesNumero == index + 1 &&

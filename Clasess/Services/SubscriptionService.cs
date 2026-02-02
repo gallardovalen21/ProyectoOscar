@@ -17,6 +17,21 @@ namespace Clasess.Services
             _db = sub;
             
         }
+
+        private int GetMonthsFromCycle(string? cycle)
+        {
+            return cycle switch
+            {
+                "Mensual" => 1,
+                "Bimenstral" => 2,
+                "Bimestral" => 2,
+                "Trimestral" => 3,
+                "Cuatrimestral" => 4,
+                "Semestral" => 6,
+                "Anual" => 12,
+                _ => 1
+            };
+        }
         public Subscription AddSubscription(Subscription subscription)
         {
             if (subscription == null)
@@ -39,6 +54,9 @@ namespace Clasess.Services
                 existingSub.Currency = sub.Currency;
                 existingSub.BillingCycle = sub.BillingCycle;
                 existingSub.Category = sub.Category;
+                // Persist Description and Periodo which were previously omitted
+                existingSub.Description = sub.Description;
+                existingSub.Periodo = sub.Periodo;
                 existingSub.NextBillingDate = sub.NextBillingDate;
                 existingSub.Status = sub.Status;
                 existingSub.IsTrial = sub.IsTrial;
@@ -50,7 +68,10 @@ namespace Clasess.Services
 
         public Subscription? GetSubscriptionByID(int id)
         {
-            return _db.Subscriptions.FirstOrDefault(s => s.Id == id);
+            // Include payments when retrieving a subscription for editing/viewing history
+            return _db.Subscriptions
+                      .Include(s => s.Payments)
+                      .FirstOrDefault(s => s.Id == id);
         }
 
 
@@ -90,13 +111,9 @@ namespace Clasess.Services
                 _db.Payments.Remove(lastPayment);
 
                 // 3. RETROCEDEMOS la fecha de facturación
-                sub.NextBillingDate = sub.BillingCycle switch
-                {
-                    "Mensual" => sub.NextBillingDate.AddMonths(-1),
-                    "Trimestral" => sub.NextBillingDate.AddMonths(-3),
-                    "Anual" => sub.NextBillingDate.AddYears(-1),
-                    _ => sub.NextBillingDate.AddMonths(-1)
-                };
+                // Use the same cycle->months mapping as when advancing the date
+                var months = GetMonthsFromCycle(sub.BillingCycle);
+                sub.NextBillingDate = sub.NextBillingDate.AddMonths(-months);
 
                 _db.SaveChanges();
             }
@@ -172,21 +189,19 @@ namespace Clasess.Services
                     }
 
                     // 5. REGISTRO DEL PAGO: Usamos el monto (ya actualizado)
+                    // Preserve the subscription's own `Periodo` value at the time of payment
                     sub.Payments.Add(new Payment
                     {
                         Date = sub.NextBillingDate,
-                        Amount = sub.Amount
+                        Amount = sub.Amount,
+                        Periodo = sub.Periodo
                     });
 
                    
                
                     sub.NextBillingDate = sub.BillingCycle switch
                     {
-                        "Mensual" => sub.NextBillingDate.AddMonths(1),
-                        "Bimenstral" => sub.NextBillingDate.AddMonths(2),
-                        "Trimestral" => sub.NextBillingDate.AddMonths(3),
-                        "Anual" => sub.NextBillingDate.AddYears(1),
-                        _ => sub.NextBillingDate.AddMonths(1)
+                        _ => sub.NextBillingDate.AddMonths(GetMonthsFromCycle(sub.BillingCycle))
                     };
 
                     changed = true;
@@ -202,24 +217,24 @@ namespace Clasess.Services
 
             if (sub != null)
             {
+                // Preserve the subscription's textual Periodo value at the time of payment
                 sub.Payments.Add(new Payment
                 {
                     Date = sub.NextBillingDate,
-                    Amount = sub.Amount
+                    Amount = sub.Amount,
+                    Periodo = sub.Periodo
                 });
 
                 sub.NextBillingDate = sub.BillingCycle switch
                 {
-                    "Mensual" => sub.NextBillingDate.AddMonths(1),
-                    "Bimenstral" => sub.NextBillingDate.AddMonths(2),
-                    "Trimestral" => sub.NextBillingDate.AddMonths(3),
-                    "Anual" => sub.NextBillingDate.AddYears(1),
-                    _ => sub.NextBillingDate.AddMonths(1) 
+                    _ => sub.NextBillingDate.AddMonths(GetMonthsFromCycle(sub.BillingCycle)) 
                 };
 
                 _db.SaveChanges();
             }
         }
+
+        // Note: Payment.Periodo is set directly from Subscription.Periodo when creating a payment.
 
         public bool DeleteSubscription(int? SuscriptionID)
         {

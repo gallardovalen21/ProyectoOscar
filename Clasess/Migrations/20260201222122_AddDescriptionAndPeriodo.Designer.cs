@@ -3,6 +3,7 @@ using System;
 using Clasess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clasess.Migrations
 {
     [DbContext(typeof(SubDbContext))]
-    partial class SubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260201222122_AddDescriptionAndPeriodo")]
+    partial class AddDescriptionAndPeriodo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.22");
@@ -28,9 +31,6 @@ namespace Clasess.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Periodo")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("SubscriptionId")

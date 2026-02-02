@@ -21,6 +21,10 @@ namespace Clasess
 
         [JsonPropertyName("reminder_days")] public int Recordatorio { get; set; }
 
+        // New fields
+        [JsonPropertyName("description")] public string? Description { get; set; }
+        // periodo is a textual field but will contain numeric-like ranges such as "01-02" or "01/03"
+        [JsonPropertyName("periodo")] public string? Periodo { get; set; }
 
         public List<Payment> Payments { get; set; } = new();
 
